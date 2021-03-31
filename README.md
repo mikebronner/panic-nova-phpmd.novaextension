@@ -20,21 +20,21 @@ Let's get started!
 
 ![](https://nova.app/images/en/dark/editor.png)
 
-## Requirements
+<!-- ## Requirements -->
 
 <!--
 🎈 If your extension depends on external processes or tools that users will need to have, it's helpful to list those and provide links to their installers:
 -->
 
-PHP Mess Detector requires some additional tools to be installed on your Mac:
+<!-- PHP Mess Detector requires some additional tools to be installed on your Mac:
 
 - [Node.js 8.2.0](https://nodejs.org) and NPM 5.2.0 or newer
-
+ -->
 <!--
 ✨ Providing tips, tricks, or other guides for installing or configuring external dependencies can go a long way toward helping your users have a good setup experience:
 -->
 
-> To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that completes, double-click the **.pkg** installer to begin installation.
+<!-- > To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that completes, double-click the **.pkg** installer to begin installation. -->
 
 ### Configuration
 
