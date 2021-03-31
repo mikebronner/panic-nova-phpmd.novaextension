@@ -1,7 +1,7 @@
 exports.activate = function() {
     console.log("Extension is activated.");
     var process = new Process("/usr/bin/env", {
-        args: ["chmod", "+x", "Bin/phpmd"],
+        args: ["chmod", "+x", "./Bin/phpmd"],
         shell: true
     });
     process.onStderr(function(line) {console.error(line);});
@@ -78,7 +78,7 @@ class IssuesProvider {
                     "PHPMD started linting "
                     + editor.document.path
                 );
-                console.log("Running command: " + './Bin/phpmd ' + editor.document.path + ' json ' + self.getStandard());
+                console.log("Running command: " + './Bin/phpmd ' + `${editor.document.path}` + ' json ' + self.getStandard());
 
                 linter.start();
             } catch (error) {
