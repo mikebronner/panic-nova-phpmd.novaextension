@@ -1,5 +1,11 @@
 exports.activate = function() {
     console.log("Extension is activated.");
+    var process = new Process("/usr/bin/env", {
+        args: ["chmod", "+x", "Bin/phpmd"],
+        shell: true
+    });
+    process.onStderr(function(line) {console.error(line);});
+    process.start();
 }
 
 exports.deactivate = function() {
@@ -56,7 +62,6 @@ class IssuesProvider {
                 
                 linter.onStdout(function (line) {
                     output = output + line;
-                    // console.log("PHPMD Output: " + line);
                 });
 
                 linter.onDidExit(function () {
