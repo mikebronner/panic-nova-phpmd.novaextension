@@ -1,0 +1,48 @@
+{
+    "identifier": "genealabs.phpmd",
+    "name": "PHP Mess Detector",
+    "organization": "GeneaLabs",
+    "description": "PHPMD linter for Panic's Nova editor.",
+    "version": "0.1.0",
+    "categories": ["issues"],
+    
+    "main": "main.js",
+    
+    "activationEvents": [
+        "onLanguage:php",
+        "onWorkspaceContains:phpmd.xml"
+    ],
+    
+    "bugs": "https://github.com/GeneaLabs/panic-nova-phpmd/issues",
+    "funding": "https://github.com/sponsors/GeneaLabs",
+    "license": "MIT",
+    "repository": "https://github.com/GeneaLabs/panic-nova-phpmd",
+    
+    "entitlements": {
+        "filesystem": "readonly",
+        "process": true,
+        "requests": true
+    },
+    
+    "config": [
+        {
+            "key": "genealabs.phpmd.standard",
+            "title": "Standard",
+            "description": "The coding standard PHPMD should use for linting [cleancode, codesize, controversial, design, naming, unusedcode]. If specifying multiple standards, list them as comma-separated values. You can also specify a workspace-relative or absolute path to a phpcs.xml configuration file. If you do not provide a standard, PHPMD will look for 'phpmd.xml' at the workspace path. If neither is provided, PHPMD will fall back to 'cleancode,codesize,controversial,design,naming,unusedcode'.",
+            "type": "string",
+            "placeholder": "phpmd.xml|cleancode,codesize,controversial,design,naming,unusedcode",
+            "default": ""
+        }
+    ],
+    
+    "configWorkspace": [
+        {
+            "key": "genealabs.phpcs.standard",
+            "title": "Standard",
+            "description": "The coding standard PHPMD should use for linting [cleancode, codesize, controversial, design, naming, unusedcode]. If specifying multiple standards, list them as comma-separated values. You can also specify a workspace-relative or absolute path to a phpcs.xml configuration file. If you do not provide a standard, PHPMD will look for 'phpmd.xml' at the workspace path. If neither is provided, PHPMD will fall back to 'cleancode,codesize,controversial,design,naming,unusedcode'.",
+            "type": "string",
+            "placeholder": "phpmd.xml|cleancode,codesize,controversial,design,naming,unusedcode",
+            "default": ""
+        }
+    ]
+}
