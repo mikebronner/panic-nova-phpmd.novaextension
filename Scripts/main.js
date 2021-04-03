@@ -88,14 +88,19 @@ class IssuesProvider {
     }
     
     parseLinterOutput(editor, output) {
+        let self = this;
         let lints = JSON.parse(output);
         let issues = lints.files
             .flatMap(function (lint) {
                 return lint.violations;
             })
             .map(function (violation) {
+                let code = self.getLineOfCode(editor, violation.beginLine);
                 let issue = new Issue();
-                
+                let target = violation.function
+                    || violation.class
+                    || violation.method;
+
                 issue.message = violation.description;
                 issue.severity = IssueSeverity.Warning;
                 
@@ -103,15 +108,29 @@ class IssuesProvider {
                     issue.severity = IssueSeverity.Error;
                 }
 
-                issue.column = 1;                
                 issue.line = violation.beginLine;
-                issue.code = violation.rule + " | " + violation.ruleSet + " | phpmd";
-                issue.endLine = violation.beginLine + 1;
+                issue.code = violation.rule + "| " + violation.ruleSet + " | phpmd";
+                issue.endLine = issue.line;
+                issue.column = self.getColumn(code, target);
+                issue.endColumn = issue.column + target.length;
     
                 return issue;
             });
             
         return issues;
+    }
+    
+    getLineOfCode(editor, lineNumber)
+    {
+        let range = new Range(0, editor.document.length);
+        let documentText = editor.getTextInRange(range);
+        
+        return documentText.split("\n")[lineNumber - 1];
+    }
+    
+    getColumn(haystack, needle)
+    {
+        return haystack.indexOf(needle) + 1;
     }
 }
 

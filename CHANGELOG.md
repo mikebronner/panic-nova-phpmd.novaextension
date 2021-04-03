@@ -1,8 +1,11 @@
 # Changelog
 ## [Upcoming]
-- refining underlining of linted code to only underline affected code, and not the entire line.
 
 ## [Known Issues]
+
+## [0.1.3] - 2021-04-03
+### Fixed
+- underlining of offending piece of code specifically, instead of entire line.
 
 ## [0.1.2] - 2021-03-31
 ### Fixed
