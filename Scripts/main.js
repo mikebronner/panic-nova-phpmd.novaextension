@@ -51,17 +51,13 @@ class IssuesProvider {
         let self = this;
         let range = new Range(0, editor.document.length);
         let documentText = editor.getTextInRange(range);
-        let lintFile = nova.fs.open(nova.extension.path +  "/lintFile.tmp.php", "w");
 
-        lintFile.write(editor.getTextInRange(range));
-        lintFile.close();
         this.output = "";
 
         return new Promise(function (resolve) {
             try {
                 if (
                     self.linter !== undefined
-                    && self.linter.pid > 0
                 ) {
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                         console.log("Killed previous linter instance.");
@@ -74,18 +70,25 @@ class IssuesProvider {
                 self.linter = new Process('/usr/bin/env', {
                     args: [
                         './Bin/phpmd',
-                        `${lintFile.path}`,
+                        "-",
                         'json',
                         self.getStandard(),
                     ],
                     shell: true,
+                    stdio: ["pipe", "pipe", "pipe"],
                 });
+
+                self.writer = self.linter.stdin.getWriter();
 
                 self.linter.onStderr(function (error) {
                     console.error(error);
                 });
 
                 self.linter.onStdout(function (line) {
+                    if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
+                        console.log("Linter output:", line);
+                    }
+
                     self.output = self.output + line;
                 });
 
@@ -95,22 +98,26 @@ class IssuesProvider {
                     }
 
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
-                        console.log(
-                            "Finished linting "
-                            + editor.document.path
-                        );
+                        console.log("Finished linting.");
                     }
                 });
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
-                    console.log(
-                        "PHPMD started linting "
-                        + editor.document.path
-                    );
-                    console.log("Running command: " + './Bin/phpmd ' + `${lintFile.path}` + ' json ' + self.getStandard());
+                    console.log("Started linting.");
+                    console.log("Running command: " + './Bin/phpmd - json ' + self.getStandard());
                 }
 
                 self.linter.start();
+
+                self.writer.ready.then(function () {
+                    let range = new Range(0, editor.document.length);
+                    let documentText = editor.getTextInRange(range);
+
+                    self.writer.write(documentText);
+                });
+                self.writer.ready.then(function () {
+                    self.writer.close();
+                });
             } catch (error) {
                 console.error(error);
             }

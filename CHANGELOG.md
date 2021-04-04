@@ -3,6 +3,14 @@
 
 ## [Known Issues]
 
+## [0.1.5] - 2021-04-04
+### Added
+- license details.
+
+### Updated
+- linting process to use `stdin` instead of relying on a file, which greatly
+  improves performance.
+
 ## [0.1.4] - 2021-04-03
 ### Added
 - linter process cancelation, in the event that a new linter was started before
