@@ -3,27 +3,27 @@
     "name": "PHP Mess Detector",
     "organization": "GeneaLabs",
     "description": "PHPMD linter for Panic's Nova editor.",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "categories": ["issues"],
-    
+
     "main": "main.js",
-    
+
     "activationEvents": [
         "onLanguage:php",
         "onWorkspaceContains:phpmd.xml"
     ],
-    
+
     "bugs": "https://github.com/GeneaLabs/panic-nova-phpmd/issues",
     "funding": "https://github.com/sponsors/GeneaLabs",
     "license": "MIT",
     "repository": "https://github.com/GeneaLabs/panic-nova-phpmd",
-    
+
     "entitlements": {
-        "filesystem": "readonly",
+        "filesystem": "readwrite",
         "process": true,
-        "requests": true
+        "requests": false
     },
-    
+
     "config": [
         {
             "key": "genealabs.phpmd.standard",
@@ -32,9 +32,16 @@
             "type": "string",
             "placeholder": "phpmd.xml|cleancode,codesize,controversial,design,naming,unusedcode",
             "default": ""
+        },
+        {
+            "key": "genealabs.phpmd.debugging",
+            "title": "Debugging",
+            "description": "Show debug logs in Extension Console.",
+            "type": "boolean",
+            "default": false
         }
     ],
-    
+
     "configWorkspace": [
         {
             "key": "genealabs.phpcs.standard",
@@ -43,6 +50,13 @@
             "type": "string",
             "placeholder": "phpmd.xml|cleancode,codesize,controversial,design,naming,unusedcode",
             "default": ""
+        },
+        {
+            "key": "genealabs.phpmd.debugging",
+            "title": "Debugging",
+            "description": "Show debug logs in Extension Console.",
+            "type": "boolean",
+            "default": false
         }
     ]
 }
