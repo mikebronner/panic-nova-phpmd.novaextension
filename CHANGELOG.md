@@ -2,7 +2,16 @@
 ## [Upcoming]
 
 ## [Known Issues]
-- Investigating co-mingling of lint results between open files.
+- Monitoring co-mingling of lint results between open files.
+- PHPMD depends on PDepend, which is currently working on implementing PHP 8.0
+  compatibility. While PDepend has been updated with only a few issues
+  outstanding, PHPMD has not yet been updated. See
+  https://github.com/phpmd/phpmd/issues/853. PHP 8 syntax can prevent successful
+  linting of the entire file.
+
+## [0.1.9] - 2021-04-05
+### Added
+- display of parsing errors to the document.
 
 ## [0.1.8] - 2021-04-05
 ### Fixed

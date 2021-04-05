@@ -124,15 +124,19 @@ class IssuesProvider {
                 let issue = new Issue();
 
                 issue.message = lint.description;
-                issue.severity = IssueSeverity.Warning;
+                issue.severity = IssueSeverity.Error;
 
                 if (lint.priority <= 2) {
-                    issue.severity = IssueSeverity.Error;
+                    issue.severity = IssueSeverity.Warning;
                 }
 
                 issue.line = lint.beginLine;
                 issue.code = lint.rule + "| " + lint.ruleSet + " | phpmd";
                 issue.endLine = issue.line + 1;
+
+                if (issue.message.indexOf("Unexpected token: ")) {
+                    issue.line = issue.message.search(/^.*? line: (.*?), col: .*$/i);
+                }
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Found lint:");
@@ -154,7 +158,30 @@ class IssuesProvider {
                 return issue !== null;
             });
 
-        return issues;
+            let errors = lints.errors
+                .map(function (lint) {
+                    let issue = new Issue();
+                    let regexp = /^.*? line: (.*?), col: .*$/i;
+
+                    issue.message = lint.message;
+                    issue.severity = IssueSeverity.Error;
+                    issue.line = issue.message.match(/^.*? line: (.*?), col: .*$/i)[1];
+                    issue.code = "phpmd";
+                    issue.endLine = issue.line + 1;
+
+                    if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
+                        console.log("Found error lint:");
+                        console.log("===========");
+                        console.log("Line: " + issue.line);
+                        console.log("Message: " + lint.message);
+                        console.log("===========");
+                    }
+
+                    return issue;
+                });
+
+        return issues
+            .concat(errors);
     }
 }
 
