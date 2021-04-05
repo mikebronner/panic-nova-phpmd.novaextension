@@ -3,7 +3,7 @@
     "name": "PHP Mess Detector",
     "organization": "GeneaLabs",
     "description": "PHPMD linter for Panic's Nova editor.",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "categories": ["issues"],
 
     "main": "main.js",

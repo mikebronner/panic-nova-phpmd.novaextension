@@ -51,6 +51,9 @@ class IssuesProvider {
         let self = this;
 
         return new Promise(function (resolve) {
+            let fileName = Math.random().toString(36).substring(2, 15)
+                + Math.random().toString(36).substring(2, 15)
+                + ".php";
             let range = new Range(0, editor.document.length);
             let documentText = editor.getTextInRange(range);
             let output = "";
@@ -61,7 +64,7 @@ class IssuesProvider {
                 // fail silently
             }
 
-            let lintFile = nova.fs.open(nova.extension.workspaceStoragePath +  "/lintFile.tmp.php", "w");
+            let lintFile = nova.fs.open(nova.path.join(nova.extension.workspaceStoragePath, fileName), "w");
 
             lintFile.write(documentText);
             lintFile.close();
@@ -73,12 +76,9 @@ class IssuesProvider {
                         `${lintFile.path}`,
                         'json',
                         self.getStandard(),
+                        '--ignore-violations-on-exit'
                     ],
                     shell: true,
-                });
-
-                linter.onStderr(function (error) {
-                    console.error(error);
                 });
 
                 linter.onStdout(function (line) {
@@ -97,11 +97,13 @@ class IssuesProvider {
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                         console.log("Finished linting.");
                     }
+
+                    nova.fs.remove(lintFile.path);
                 });
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Started linting.");
-                    console.log("Running command: " + './Bin/phpmd - json ' + self.getStandard());
+                    console.log("Running command: " + './Bin/phpmd ' + lintFile.path + ' json ' + self.getStandard());
                 }
 
                 linter.start();

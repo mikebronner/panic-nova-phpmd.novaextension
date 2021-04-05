@@ -2,6 +2,11 @@
 ## [Upcoming]
 
 ## [Known Issues]
+- Investigating co-mingling of lint results between open files.
+
+## [0.1.8] - 2021-04-05
+### Fixed
+- comingling of lint results between files.
 
 ## [0.1.7] - 2021-04-05
 ### Fixed
