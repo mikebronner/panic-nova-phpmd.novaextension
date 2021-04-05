@@ -3,6 +3,10 @@
 
 ## [Known Issues]
 
+## [0.1.7] - 2021-04-05
+### Fixed
+- comingling of lint results between files.
+
 ## [0.1.6] - 2021-04-04
 ### Fixed
 - linting process to use temporary files, instead of `stdin` as there are issues

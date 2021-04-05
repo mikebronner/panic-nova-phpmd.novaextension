@@ -53,7 +53,7 @@ class IssuesProvider {
         return new Promise(function (resolve) {
             let range = new Range(0, editor.document.length);
             let documentText = editor.getTextInRange(range);
-            self.output = "";
+            let output = "";
 
             try {
                 nova.fs.mkdir(nova.extension.workspaceStoragePath)
@@ -86,12 +86,12 @@ class IssuesProvider {
                         console.log("Linter output:", line);
                     }
 
-                    self.output += line;
+                    output += line;
                 });
 
                 linter.onDidExit(function () {
-                    if (self.output.length > 0) {
-                        resolve(self.parseLinterOutput(self.output));
+                    if (output.length > 0) {
+                        resolve(self.parseLinterOutput(output));
                     }
 
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
