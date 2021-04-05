@@ -49,52 +49,49 @@ class IssuesProvider {
     provideIssues(editor) {
         let issues = [];
         let self = this;
-        let range = new Range(0, editor.document.length);
-        let documentText = editor.getTextInRange(range);
-
-        this.output = "";
 
         return new Promise(function (resolve) {
+            let range = new Range(0, editor.document.length);
+            let documentText = editor.getTextInRange(range);
+            self.output = "";
+
             try {
-                if (
-                    self.linter !== undefined
-                ) {
-                    if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
-                        console.log("Killed previous linter instance.");
-                    }
+                nova.fs.mkdir(nova.extension.workspaceStoragePath)
+            } catch (error) {
+                // fail silently
+            }
 
-                    self.output = "";
-                    self.linter.kill();
-                }
+            let lintFile = nova.fs.open(nova.extension.workspaceStoragePath +  "/lintFile.tmp.php", "w");
 
-                self.linter = new Process('/usr/bin/env', {
+            lintFile.write(documentText);
+            lintFile.close();
+
+            try {
+                let linter = new Process('/usr/bin/env', {
                     args: [
                         './Bin/phpmd',
-                        "-",
+                        `${lintFile.path}`,
                         'json',
                         self.getStandard(),
                     ],
                     shell: true,
-                    stdio: ["pipe", "pipe", "pipe"],
                 });
 
-                self.writer = self.linter.stdin.getWriter();
-
-                self.linter.onStderr(function (error) {
+                linter.onStderr(function (error) {
                     console.error(error);
                 });
 
-                self.linter.onStdout(function (line) {
+                linter.onStdout(function (line) {
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                         console.log("Linter output:", line);
                     }
 
-                    self.output = self.output + line;
+                    self.output += line;
                 });
 
-                self.linter.onDidExit(function () {
+                linter.onDidExit(function () {
                     if (self.output.length > 0) {
-                        resolve(self.parseLinterOutput(editor, self.output));
+                        resolve(self.parseLinterOutput(self.output));
                     }
 
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
@@ -107,24 +104,14 @@ class IssuesProvider {
                     console.log("Running command: " + './Bin/phpmd - json ' + self.getStandard());
                 }
 
-                self.linter.start();
-
-                self.writer.ready.then(function () {
-                    let range = new Range(0, editor.document.length);
-                    let documentText = editor.getTextInRange(range);
-
-                    self.writer.write(documentText);
-                });
-                self.writer.ready.then(function () {
-                    self.writer.close();
-                });
+                linter.start();
             } catch (error) {
-                console.error(error);
+                console.error("error during processing", error);
             }
         });
     }
 
-    parseLinterOutput(editor, output) {
+    parseLinterOutput(output) {
         let self = this;
         let lints = JSON.parse(output);
         let issues = lints.files
@@ -132,11 +119,7 @@ class IssuesProvider {
                 return lint.violations;
             })
             .map(function (lint) {
-                let code = self.getLineOfCode(editor, lint.beginLine);
                 let issue = new Issue();
-                let target = lint.function
-                    || lint.class
-                    || lint.method;
 
                 issue.message = lint.description;
                 issue.severity = IssueSeverity.Warning;
@@ -147,20 +130,15 @@ class IssuesProvider {
 
                 issue.line = lint.beginLine;
                 issue.code = lint.rule + "| " + lint.ruleSet + " | phpmd";
-                issue.endLine = issue.line;
-                issue.column = self.getColumn(code, target);
-                issue.endColumn = issue.column + target.length;
+                issue.endLine = issue.line + 1;
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Found lint:");
                     console.log("===========");
-                    console.log("Line Of Code: |" + code + "|");
                     console.log("Line: " + issue.line);
                     console.log("Class: " + lint.class);
                     console.log("Function: " + lint.function);
                     console.log("Method: " + lint.method);
-                    console.log("Calculated Start Column: " + issue.column);
-                    console.log("Calculated End Column: " + issue.endColumn);
                     console.log("Message: " + lint.description);
                     console.log("Rule: " + lint.rule);
                     console.log("Ruleset: " + lint.ruleSet);
@@ -169,22 +147,12 @@ class IssuesProvider {
                 }
 
                 return issue;
+            })
+            .filter(function (issue) {
+                return issue !== null;
             });
 
         return issues;
-    }
-
-    getLineOfCode(editor, lineNumber)
-    {
-        let range = new Range(0, editor.document.length);
-        let documentText = editor.getTextInRange(range);
-
-        return documentText.split("\n")[lineNumber - 1];
-    }
-
-    getColumn(haystack, needle)
-    {
-        return haystack.indexOf(needle) + 1;
     }
 }
 

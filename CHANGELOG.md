@@ -3,6 +3,14 @@
 
 ## [Known Issues]
 
+## [0.1.6] - 2021-04-04
+### Fixed
+- linting process to use temporary files, instead of `stdin` as there are issues
+  with the linter's upstream dependencies in connection with `stdin`.
+- linting results to underline entire row, as it is difficult to find the exact
+  corresponding code based on JSON results. Will investigate other options down
+  the road.
+
 ## [0.1.5] - 2021-04-04
 ### Added
 - license details.
