@@ -9,6 +9,10 @@
   https://github.com/phpmd/phpmd/issues/853. PHP 8 syntax can prevent successful
   linting of the entire file.
 
+## [0.1.10] - 2021-04-06
+### Fixed
+- handling of error lints when no errors were present.
+
 ## [0.1.9] - 2021-04-05
 ### Added
 - display of parsing errors to the document.

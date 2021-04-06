@@ -134,21 +134,14 @@ class IssuesProvider {
                 issue.code = lint.rule + "| " + lint.ruleSet + " | phpmd";
                 issue.endLine = issue.line + 1;
 
-                if (issue.message.indexOf("Unexpected token: ")) {
-                    issue.line = issue.message.search(/^.*? line: (.*?), col: .*$/i);
-                }
-
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Found lint:");
                     console.log("===========");
                     console.log("Line: " + issue.line);
-                    console.log("Class: " + lint.class);
-                    console.log("Function: " + lint.function);
-                    console.log("Method: " + lint.method);
-                    console.log("Message: " + lint.description);
-                    console.log("Rule: " + lint.rule);
+                    console.log("Message: " + issue.message);
+                    console.log("Code: " + issue.code);
                     console.log("Ruleset: " + lint.ruleSet);
-                    console.log("Priority: " + lint.priority);
+                    console.log("Severity: " + issue.severity);
                     console.log("===========");
                 }
 
@@ -158,7 +151,7 @@ class IssuesProvider {
                 return issue !== null;
             });
 
-            let errors = lints.errors
+            let errors = (lints.errors || [])
                 .map(function (lint) {
                     let issue = new Issue();
                     let regexp = /^.*? line: (.*?), col: .*$/i;
