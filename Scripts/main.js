@@ -90,9 +90,19 @@ class IssuesProvider {
                 });
 
                 linter.onDidExit(function () {
-                    if (output.length > 0) {
-                        resolve(self.parseLinterOutput(output));
+                    output = output.trim();
+
+                    if (output.length === 0) {
+                        return resolve([]);
                     }
+
+                    if (! self.outputIsJson(output)) {
+                        console.error(output);
+
+                        return resolve([]);
+                    }
+
+                    resolve(self.parseLinterOutput(output));
 
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                         console.log("Finished linting.");
@@ -111,6 +121,15 @@ class IssuesProvider {
                 console.error("error during processing", error);
             }
         });
+    }
+
+    outputIsJson(output)
+    {
+        try {
+            return (JSON.parse(output) && !!output);
+        } catch (error) {
+            return false;
+        }
     }
 
     parseLinterOutput(output) {
@@ -154,7 +173,6 @@ class IssuesProvider {
             let errors = (lints.errors || [])
                 .map(function (lint) {
                     let issue = new Issue();
-                    let regexp = /^.*? line: (.*?), col: .*$/i;
 
                     issue.message = lint.message;
                     issue.severity = IssueSeverity.Error;
