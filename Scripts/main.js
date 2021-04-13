@@ -21,6 +21,52 @@ class IssuesProvider {
     constructor() {
     }
 
+    getExecutablePath()
+    {
+        let globalExecutable = nova.config
+            .get("genealabs.phpmd.executablePath", "string")
+            .trim();
+        let projectExecutable = nova.workspace
+            .config
+            .get("genealabs.phpmd.executablePath", "string")
+            .trim();
+        let bundledExecutable = nova.path.join(
+            nova.extension.path,
+            "Bin",
+            "phpmd"
+        );
+
+        if (
+            globalExecutable.length > 0
+            && globalExecutable.charAt() !== "/"
+        ) {
+            globalExecutable = nova.path.join(
+                nova.workspace.path,
+                globalExecutable
+            );
+        }
+
+        if (
+            projectExecutable.length > 0
+            && projectExecutable.charAt() !== "/"
+        ) {
+            projectExecutable = nova.path.join(
+                nova.workspace.path,
+                projectExecutable
+            );
+        }
+
+        let path = projectExecutable
+            || globalExecutable
+            || bundledExecutable;
+
+        if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
+            console.log("Executable Path", path);
+        }
+
+        return path;
+    }
+
     getStandard() {
         let customStandard = nova.path.join(nova.workspace.path, "phpmd.xml");
         let projectStandard = nova.workspace.config.get(
@@ -72,7 +118,7 @@ class IssuesProvider {
             try {
                 let linter = new Process('/usr/bin/env', {
                     args: [
-                        './Bin/phpmd',
+                        self.getExecutablePath(),
                         `${lintFile.path}`,
                         'json',
                         self.getStandard(),
@@ -113,7 +159,7 @@ class IssuesProvider {
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Started linting.");
-                    console.log("Running command: " + './Bin/phpmd ' + lintFile.path + ' json ' + self.getStandard());
+                    console.log("Running command: " + self.getExecutablePath() + lintFile.path + ' json ' + self.getStandard());
                 }
 
                 linter.start();

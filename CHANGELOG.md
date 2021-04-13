@@ -5,10 +5,14 @@
 - PHPMD depends on PDepend, which is currently working on implementing PHP 8.0
   compatibility. While PDepend has been updated with only a few issues
   outstanding, PHPMD has not yet been updated. See
-  https://github.com/phpmd/phpmd/issues/853. PHP 8 syntax can prevent successful
-  linting of the entire file.
+  https://github.com/phpmd/phpmd/issues/853. Because of this, PHP 8 syntax can
+  prevent successful linting of the entire file.
 
-## [0.1.10] - 2021-04-06
+## [0.1.12] - 2021-04-13
+### Added
+- executable path option.
+
+## [0.1.11] - 2021-04-06
 ### Added
 - handling of non-json output messages from PHPMD.
 
