@@ -125,7 +125,6 @@ class IssuesProvider {
                         '--ignore-violations-on-exit',
                     ],
                     shell: true,
-                    stdio: ["pipe", "pipe", "pipe"],
                 });
 
                 linter.onStdout(function (line) {
@@ -139,10 +138,12 @@ class IssuesProvider {
 
                     output += line;
                 });
-                linter.onStderr(function(line) {console.error(line);});
 
-                linter.onDidExit(function (line) {
-                    console.log("line", line);
+                linter.onStderr(function (line) {
+                    console.error(line);
+                });
+
+                linter.onDidExit(function () {
                     output = output.trim();
 
                     if (output.length === 0) {
@@ -166,7 +167,7 @@ class IssuesProvider {
 
                 if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                     console.log("Started linting.");
-                    console.log("Running command: " + self.getExecutablePath() + " " + lintFile.path + ' json ' + self.getStandard());
+                    console.log(`Running command: ${self.getExecutablePath()} ${lintFile.path} json ${self.getStandard()}`);
                 }
 
                 linter.start();

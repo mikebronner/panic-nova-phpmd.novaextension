@@ -3,14 +3,13 @@
     "name": "PHP Mess Detector",
     "organization": "GeneaLabs",
     "description": "PHPMD linter for Panic's Nova editor.",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "categories": ["issues"],
 
     "main": "main.js",
 
     "activationEvents": [
-        "onLanguage:php",
-        "onWorkspaceContains:phpmd.xml"
+        "onLanguage:php"
     ],
 
     "bugs": "https://github.com/GeneaLabs/panic-nova-phpmd/issues",

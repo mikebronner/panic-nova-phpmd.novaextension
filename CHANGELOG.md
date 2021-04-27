@@ -6,6 +6,10 @@
 
 ## [Known Issues]
 
+## [0.1.14] - 2021-04-27
+### Updated
+- main script to try to debug issues with PHPMD not providing results in projects.
+
 ## [0.1.13] - 2021-04-26
 ### Updated
 - PHPMD linter to version 2.10.0, which now works with PHP 8. PHPMD s
