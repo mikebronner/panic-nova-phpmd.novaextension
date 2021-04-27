@@ -1,3 +1,3 @@
 #!/bin/sh
 ./Bin/phive selfupdate
-./Bin/phive update
+./Bin/phive update --force-accept-unsigned

@@ -1,12 +1,14 @@
 # Changelog
 ## [Upcoming]
+- increased performance by using STDIN for linting content, instead of
+  linting temp files. This is currently blocked by PHPMD, reference
+  https://github.com/phpmd/phpmd/issues/882.
 
 ## [Known Issues]
-- PHPMD depends on PDepend, which is currently working on implementing PHP 8.0
-  compatibility. While PDepend has been updated with only a few issues
-  outstanding, PHPMD has not yet been updated. See
-  https://github.com/phpmd/phpmd/issues/853. Because of this, PHP 8 syntax can
-  prevent successful linting of the entire file.
+
+## [0.1.13] - 2021-04-26
+### Updated
+- PHPMD linter to version 2.10.0, which now works with PHP 8. PHPMD s
 
 ## [0.1.12] - 2021-04-13
 ### Added

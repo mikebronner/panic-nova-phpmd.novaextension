@@ -1,2 +1,2 @@
 #!/bin/sh
-./Bin/phive install phpmd --target Bin --copy
+./Bin/phive install phpmd --target Bin --copy --force-accept-unsigned
