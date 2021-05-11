@@ -6,6 +6,10 @@
 
 ## [Known Issues]
 
+## [0.1.15] - 2021-05-11
+### Updated
+- PHPMD to 2.10.1.
+
 ## [0.1.14] - 2021-04-27
 ### Updated
 - main script to try to debug issues with PHPMD not providing results in projects.
