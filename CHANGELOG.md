@@ -6,6 +6,10 @@
 
 ## [Known Issues]
 
+## [0.1.16] - 2021-05-11
+### Fixed
+- an occasional error that occurred if the linted message was empty.
+
 ## [0.1.15] - 2021-05-11
 ### Updated
 - PHPMD to 2.10.1.

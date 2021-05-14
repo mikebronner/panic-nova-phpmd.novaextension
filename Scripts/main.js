@@ -228,11 +228,18 @@ class IssuesProvider {
                 .map(function (lint) {
                     let issue = new Issue();
 
-                    issue.message = lint.message;
-                    issue.severity = IssueSeverity.Error;
-                    issue.line = issue.message.match(/^.*? line: (.*?), col: .*$/i)[1];
+                    if (
+                        lint.message === null
+                        || lint.message === undefined
+                    ) {
+                        return issue;
+                    }
+
                     issue.code = "phpmd";
+                    issue.message = (lint.message || "");
+                    issue.line = issue.message.match(/^.*? line: (.*?), col: .*$/i)[1];
                     issue.endLine = issue.line + 1;
+                    issue.severity = IssueSeverity.Error;
 
                     if (nova.config.get('genealabs.phpmd.debugging', 'boolean')) {
                         console.log("Found error lint:");
