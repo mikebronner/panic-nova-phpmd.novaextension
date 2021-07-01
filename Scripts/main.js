@@ -237,7 +237,16 @@ class IssuesProvider {
 
                     issue.code = "phpmd";
                     issue.message = (lint.message || "");
-                    issue.line = issue.message.match(/^.*? line: (.*?), col: .*$/i)[1];
+                    let matches = issue.message.match(/^.*? line: (.*?), col: .*$/i);
+
+                    if (
+                        matches === null
+                        || matches.length <= 1
+                    ) {
+                        return issue;
+                    }
+
+                    issue.line = matches[1];
                     issue.endLine = issue.line + 1;
                     issue.severity = IssueSeverity.Error;
 

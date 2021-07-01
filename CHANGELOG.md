@@ -6,6 +6,10 @@
 
 ## [Known Issues]
 
+## [0.1.17] - 2021-07-01
+### Fixed
+- error that occurred if parsed result was a stacktrace due to upstream errors.
+
 ## [0.1.16] - 2021-05-11
 ### Fixed
 - an occasional error that occurred if the linted message was empty.
