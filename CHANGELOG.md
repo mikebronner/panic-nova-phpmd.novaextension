@@ -1,10 +1,17 @@
 # Changelog
 ## [Upcoming]
-- increased performance by using STDIN for linting content, instead of
-  linting temp files. This is currently blocked by PHPMD, reference
-  https://github.com/phpmd/phpmd/issues/882.
 
 ## [Known Issues]
+- Currently cannot use STDIN processing (which would increase performance) for
+  linting content, instead of linting temp files. This is currently blocked by
+  PHPMD, reference https://github.com/phpmd/phpmd/issues/882.
+- there are some deprication warnings related to PHPMDs file handling. We'll
+  hope these get resolved soon in future updates when PHP 8.1 is fully supported.
+- PHP 8.1's Enums are not yet supported.
+
+## [0.1.18] - 2021-05-11
+### Updated
+- PHPMD from 2.10.1 to 2.12.0.
 
 ## [0.1.17] - 2021-07-01
 ### Fixed
