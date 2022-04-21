@@ -8,6 +8,8 @@
 - there are some deprication warnings related to PHPMDs file handling. We'll
   hope these get resolved soon in future updates when PHP 8.1 is fully supported.
 - PHP 8.1's Enums are not yet supported.
+- Linting standard file reference is absolute, not project-relative. This is
+  something that will be fixed soon in this extension.
 
 ## [0.1.18] - 2021-05-11
 ### Updated
